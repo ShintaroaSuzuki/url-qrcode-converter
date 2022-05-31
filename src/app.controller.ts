@@ -1,9 +1,10 @@
 import {
   Controller,
   Get,
+  Post,
   HttpException,
   HttpStatus,
-  Query,
+  Body,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -12,15 +13,27 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  generate(
-    @Query('url')
-    url: string,
-  ): string {
+  getHello(): string {
+    return this.appService.getHello();
+  }
+
+  @Post()
+  async generate(
+    @Body()
+    { url }: { url: string },
+  ): Promise<string> {
     if (!url)
       throw new HttpException(
         'パラメータが不足しています',
         HttpStatus.BAD_REQUEST,
       );
-    return this.appService.generate({ url });
+    try {
+      return await this.appService.generate({ url });
+    } catch (e) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

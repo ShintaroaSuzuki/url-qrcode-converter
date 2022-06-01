@@ -21,12 +21,9 @@ export class AppController {
   async generate(
     @Body()
     { url }: { url: string },
-  ): Promise<string> {
+  ) {
     if (!url)
-      throw new HttpException(
-        'パラメータが不足しています',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('parameter is missing', HttpStatus.BAD_REQUEST);
     try {
       return await this.appService.generate({ url });
     } catch (e) {

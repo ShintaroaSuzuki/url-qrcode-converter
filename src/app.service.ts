@@ -7,7 +7,7 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async generate({ url }: { url: string }): Promise<string> {
-    return await QRCode.toDataURL(url, { scale: 10 });
+  async generate({ url }: { url: string }): Promise<{ dataUrl: string }> {
+    return { dataUrl: await QRCode.toDataURL(url, { scale: 10 }) };
   }
 }
